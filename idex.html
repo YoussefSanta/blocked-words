@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تشفير كلمات الديسكورد</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        #input_sentence, #output_sentence {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button.copy-button {
+            background-color: #3498db;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #output_sentence {
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function replaceWords() {
+            var originalWords = ["متوفر", "حساب", "سيرفر", "سعر", "نيترو", "فيزا", "شوب", "متجر", "ديسكورد", "دفع", "ثمن", "سوق"];
+            var replacements = ['متwفر', 'حsاب', 'سيrفر', 'س3ر', 'نيتر9', 'فيzا', 'ش9ب', 'متgر', 'ديسك9رد', 'دfع', 'تmن', 'س9ق'];
+
+            var inputSentence = document.getElementById("input_sentence").value;
+            var words = inputSentence.split(" ");
+
+            for (var i = 0; i < words.length; i++) {
+                // تحقق مما إذا كانت الكلمة تبدأ بـ "ال" أو "ت" أو "ي"
+                if (words[i].startsWith("ال")) {
+                    var originalWordIndex = originalWords.indexOf(words[i].substring(2));
+                    if (originalWordIndex !== -1) {
+                        words[i] = 'ال' + replacements[originalWordIndex];
+                    }
+                } else if (words[i].startsWith("ت") || words[i].startsWith("ي")) {
+                    var originalWordIndex = originalWords.indexOf(words[i].substring(1));
+                    if (originalWordIndex !== -1) {
+                        words[i] = words[i][0] + replacements[originalWordIndex];
+                    }
+                } else {
+                    var originalWordIndex = originalWords.indexOf(words[i]);
+                    if (originalWordIndex !== -1) {
+                        words[i] = replacements[originalWordIndex];
+                    }
+                }
+            }
+            
+            var modifiedSentence = words.join(" ");
+            document.getElementById("output_sentence").innerHTML = modifiedSentence;
+        }
+
+        function copyToClipboard() {
+            var outputSentence = document.getElementById("output_sentence");
+            var range = document.createRange();
+            range.selectNode(outputSentence);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>لوحه التشفير</h1>
+        <label for="input_sentence">ضع الجمله او الكلمه الذي تريد تشفيرها:</label>
+        <input type="text" id="input_sentence">
+        <button onclick="replaceWords()">تشفير الجمله</button>
+        <button class="copy-button" onclick="copyToClipboard()">نسخ</button>
+        <p><span id="output_sentence"></span></p>
+    </div>
+</body>
+</html>
